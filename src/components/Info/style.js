@@ -26,6 +26,7 @@ export const CountersContainer = styled.div({
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
+    gap: '1rem',
     width: '100%',
 });
 
@@ -35,11 +36,19 @@ export const CounterContainer = styled.div({
     justifyContent: 'center',
     alignItems: 'center',
     gap: '1rem',
+    padding: '1rem',
     width: '100%',
 });
 
-export const Counter = styled.pre({
-    fontSize: '2rem',
+export const DataContainer = styled.div({
+    fontSize: '1rem',
+    overflow: 'hidden',
+    maxHeight: '50rem',
+    height: '100%',
+});
+
+export const Counter = styled.div({
+    fontSize: '3rem',
 });
 
 export const CounterTitle = styled.div({
@@ -51,13 +60,39 @@ export const CounterTitle = styled.div({
 export const HeaderContainer = styled.div({
     display: 'flex',
     justifyContent: 'flex-end',
+    alignItems: 'center',
+    gap: '1rem',
     padding: '1rem',
-    fontSize: '2rem',
     backgroundColor: '#292929',
     color: '#FFFFFF',
+});
+
+export const NameContainer = styled.div({
+    display: 'flex',
+    fontSize: '2rem',
+});
+
+export const ButtonContainer = styled.div({
+    display: 'flex',
 });
 
 export const BodyContainer = styled.div({
     display: 'flex',
     height: '100%',
+});
+
+export const ButtonField = styled.button({
+    padding: '1.5rem 2rem',
+    outline: 'none',
+    borderRadius: '1rem',
+    border: '1px solid #D9D9D9',
+    backgroundColor: '#FFFFFF',
+    cursor: 'pointer',
+    '&:hover': {
+        borderColor: '#4096FF',
+    },
+    '&:focus': {
+        borderColor: '#4096FF',
+        boxShadow: '0 0 0 2px rgba(5,145,255,.1)',
+    },
 });

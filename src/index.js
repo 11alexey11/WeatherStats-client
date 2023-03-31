@@ -1,48 +1,61 @@
 import { Global } from '@emotion/react';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { createBrowserRouter, Navigate, RouterProvider } from 'react-router-dom';
+import { Error } from './components/Error';
 import { Info } from './components/Info';
 import { Login } from './components/Login';
-import { PrivateRoute } from './components/PrivateRoute';
 
 const router = createBrowserRouter([
     {
-        path: '/',
-        element: <PrivateRoute />,
-        errorElement: <div>Что-то пошло не так</div>,
+        path: '*',
+        element: <Navigate to='/login' />,
+        errorElement: <Error />,
     },
     {
         path: '/login',
         element: <Login />,
-        errorElement: <div>Что-то пошло не так</div>,
+        errorElement: <Error />,
+    },
+    {
+        path: '/register',
+        element: <Login />,
+        errorElement: <Error />,
     },
     {
         path: '/info',
         element: <Info />,
-        errorElement: <div>Что-то пошло не так</div>,
+        errorElement: <Error />,
     },
 ]);
 
+const App = () => {
+    return (
+        <>
+            <Global
+                styles={{
+                    ':root': { fontSize: '10px' },
+                    '*': { boxSizing: 'border-box', padding: 0, margin: 0 },
+                    html: {
+                        height: '100vh',
+                        width: '100vw',
+                    },
+                    body: {
+                        width: '100%',
+                        height: '100%',
+                    },
+                    '#root': {
+                        display: 'flex',
+                        justifyContent: 'center',
+                        width: '100%',
+                        height: '100%',
+                    },
+                }}
+            />
+            <RouterProvider router={router} />
+        </>
+    );
+};
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
-    <>
-        <Global
-            styles={{
-                ':root': { fontSize: '10px' },
-                '*': { boxSizing: 'border-box', padding: 0, margin: 0 },
-                html: {
-                    height: '100%',
-                },
-                body: {
-                    // width: '100%',
-                    minHeight: '100%',
-                },
-                '#root': {
-                    height: '100%',
-                },
-            }}
-        />{' '}
-        <RouterProvider router={router} />
-    </>,
-);
+root.render(<App />);

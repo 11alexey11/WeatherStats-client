@@ -2,6 +2,8 @@ export const host = 'http://localhost:5088';
 
 export const loginUrl = `${host}/entrance/login`;
 
+export const registerUrl = `${host}/entrance`;
+
 export const typhoonsUrl = `${host}/typhoons`;
 
 export const typhoonsRoutes = [

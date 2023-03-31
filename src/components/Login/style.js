@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+import { Link } from 'react-router-dom';
 
 export const LoginContainer = styled.div({
     display: 'flex',
@@ -65,4 +66,16 @@ export const ButtonField = styled.button({
 
 export const ErrorField = styled.div({
     fontSize: '1.5rem',
+});
+
+export const LinkField = styled(Link)({
+    fontSize: '1.5rem',
+    textDecoration: 'none',
+
+    '&:hover': {
+        color: '#4096FF',
+    },
+    '&:visited': {
+        color: '#4096FF',
+    },
 });
