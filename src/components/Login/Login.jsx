@@ -24,6 +24,7 @@ const Login = () => {
     const [error, setError] = useState('');
     const [login, setLogin] = useState('');
     const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
 
     useEffect(() => {
         if (isSuccess) {
@@ -40,23 +41,40 @@ const Login = () => {
     const handleOnClick = useCallback(async () => {
         const url = location.pathname === '/register' ? registerUrl : loginUrl;
         setIsFetching(true);
-        const data = await api.post(url, {
-            userName: login,
-            password,
-        });
+        const request =
+            location.pathname === '/register'
+                ? api.post(url, {
+                      userName: login,
+                      password,
+                      confirmPassword,
+                  })
+                : api.post(url, {
+                      userName: login,
+                      password,
+                  });
+        const data = await request;
         if (data.isSuccess) {
             setIsSuccess(true);
         } else {
             setError(data.error);
         }
         setIsFetching(false);
-    }, [login, password, isFetching, location]);
+    }, [login, password, isFetching, location.pathname, confirmPassword]);
+
+    useEffect(() => {
+        if (location.pathname === '/register' && isSuccess) {
+            setError('');
+            navigate('/login', { replace: true });
+        }
+    }, [location.pathname, isSuccess]);
 
     return (
         <LoginContainer>
             {!isFetching ? (
                 <FormContainer>
-                    <Title>{location.pathname === '/register' ? 'Регистрация' : 'Авторизация'}</Title>
+                    <Title>
+                        {location.pathname === '/register' ? 'Регистрация' : 'Авторизация'}
+                    </Title>
                     <FieldContainer>
                         <LabelField>Логин</LabelField>
                         <InputField value={login} onChange={(e) => setLogin(e.target.value)} />
@@ -69,8 +87,21 @@ const Login = () => {
                             onChange={(e) => setPassword(e.target.value)}
                         />
                     </FieldContainer>
+                    {location.pathname === '/register' && (
+                        <FieldContainer>
+                            <LabelField>Повторите пароль</LabelField>
+                            <InputField
+                                type='password'
+                                value={confirmPassword}
+                                onChange={(e) => setConfirmPassword(e.target.value)}
+                            />
+                        </FieldContainer>
+                    )}
+
                     <LinkField to='/register'>Зарегистрироваться?</LinkField>
-                    <ButtonField onClick={handleOnClick}>Войти</ButtonField>
+                    <ButtonField onClick={handleOnClick}>
+                        {location.pathname === '/register' ? 'Зарегистрироваться' : 'Войти'}
+                    </ButtonField>
                     {error && <ErrorField>{error}</ErrorField>}
                 </FormContainer>
             ) : (
