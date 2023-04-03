@@ -26,8 +26,10 @@ const Info = () => {
     const [activeElement, setActiveElement] = useState(-1);
     const [linqData, setLinqData] = useState({});
     const [plinqData, setPlinqData] = useState({});
+    const [parallelData, setParallelData] = useState({});
     const [urlLinq, setUrlLinq] = useState('');
     const [urlPlinq, setUrlPlinq] = useState('');
+    const [urlParallel, setUrlParallel] = useState('');
 
     useEffect(() => {
         if (!(document.cookie.includes('auth_cookie') && getCookie('auth_cookie').length)) {
@@ -36,23 +38,26 @@ const Info = () => {
     }, [document.cookie]);
 
     useEffect(() => {
-        if (urlLinq.length !== 0 && urlPlinq.length !== 0) {
+        if (urlLinq.length !== 0 && urlPlinq.length !== 0 && urlParallel.length !== 0) {
             setIsFetching(true);
             Promise.all([
                 api.get(urlLinq).then((data) => data.json()),
                 api.get(urlPlinq).then((data) => data.json()),
+                api.get(urlParallel).then((data) => data.json()),
             ]).then((data) => {
                 setIsFetching(false);
                 setLinqData(data[0]);
                 setPlinqData(data[1]);
+                setParallelData(data[2]);
             });
         }
-    }, [urlLinq, urlPlinq]);
+    }, [urlLinq, urlPlinq, urlParallel]);
 
     const handleOnClickMethodItem = useCallback((typhoonRoute, index) => {
         setActiveElement(index);
         setUrlLinq(`${typhoonsUrl}/${typhoonRoute}?mode=linq`);
         setUrlPlinq(`${typhoonsUrl}/${typhoonRoute}?mode=plinq`);
+        setUrlParallel(`${typhoonsUrl}/${typhoonRoute}?mode=parallel`);
     }, []);
 
     const handleOnClickQuit = useCallback(() => {
@@ -89,7 +94,7 @@ const Info = () => {
                     {!isFetching ? (
                         <>
                             <CounterContainer>
-                                <CounterTitle>Синхронные вычисления</CounterTitle>
+                                <CounterTitle>Linq вычисления</CounterTitle>
                                 <Counter>
                                     {linqData.calculationTime &&
                                         `Время: ${linqData.calculationTime}`}
@@ -101,7 +106,7 @@ const Info = () => {
                                 </DataContainer>
                             </CounterContainer>
                             <CounterContainer>
-                                <CounterTitle>Параллельные вычисления</CounterTitle>
+                                <CounterTitle>Plinq вычисления</CounterTitle>
                                 <Counter>
                                     {plinqData.calculationTime &&
                                         `Время: ${plinqData.calculationTime}`}
@@ -109,6 +114,18 @@ const Info = () => {
                                 <DataContainer>
                                     {Object.keys(plinqData).length !== 0
                                         ? JSON.stringify(plinqData, null, 2)
+                                        : ''}
+                                </DataContainer>
+                            </CounterContainer>
+                            <CounterContainer>
+                                <CounterTitle>Parallel вычисления</CounterTitle>
+                                <Counter>
+                                    {parallelData.calculationTime &&
+                                        `Время: ${parallelData.calculationTime}`}
+                                </Counter>
+                                <DataContainer>
+                                    {Object.keys(parallelData).length !== 0
+                                        ? JSON.stringify(parallelData, null, 2)
                                         : ''}
                                 </DataContainer>
                             </CounterContainer>
